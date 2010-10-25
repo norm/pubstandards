@@ -94,6 +94,14 @@ method get_photo_details ( Str $id! ) {
     $flickr->get_photo( $id );
 }
 
+method get_chapter_from_env ( $env ) {
+    my $host = $env->{'HTTP_HOST'};
+    
+    return $host
+        if $host =~ s{ \.pubstandards\.com $}{}x;
+    return 'london';
+}
+
 method get_config ( Str $section!, Str $key? ) {
     return $self->{'_config'}{ $section }{ $key }
         if defined $key;
