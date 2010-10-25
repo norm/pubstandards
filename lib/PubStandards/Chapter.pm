@@ -153,6 +153,44 @@ method get_all_people {
     
     return $results->{'data'};
 }
+method get_people_from_photo_pool {
+    my $parent  = $self->get_parent();
+    my $flickr  = $parent->get_flickr();
+    my $pool    = $self->get_flickr_group();
+    my $results = $flickr->get_pool_photos( $pool );
+    
+    my @people;
+    foreach my $photo ( @{ $results->{'photo'} } ) {
+        use Data::Dumper::Concise;
+        print Dumper \$photo;
+        
+        my $info = $flickr->get_photo( $photo->{'id'} );
+        
+        my $owner   = $info->{'owner'}{'nsid'};
+        my $user    = $info->{'owner'}{'username'};
+        my $tags    = $info->{'tags'};
+        my $twitter = '';
+        
+        foreach my $tag ( keys %$tags ) {
+            next unless $owner eq $tags->{ $tag }{'author'};
+            $twitter = $1
+                if $tag =~ m{^ pubstandards:twitter= (.*) $}x;
+        }
+        
+        push @people, {
+                avatar      => $info->{'urls'}{'photo_square'},
+                description => $info->{'description'},
+                nsid        => $owner,
+                name        => $info->{'title'},
+                photo       => $info->{'urls'}{'photo'},
+                photo_url   => $info->{'urls'}{'short'},
+                twitter     => $twitter,
+                user        => $user,
+            };
+    }
+    
+    return @people;
+}
 method get_photos_of_person ( Str $nsid ) {
     say "-> $nsid";
     

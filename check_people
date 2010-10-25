@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+
+use Modern::Perl;
+
+use lib     qw( lib );
+use PubStandards;
+
+
+
+my $chapter_name = shift // 'london';
+my $ps           = PubStandards->new();
+my $chapter      = $ps->get_chapter( $chapter_name );
+
+my @people = $chapter->get_people_from_photo_pool();
+foreach my $person ( @people ) {
+    my $name   = $person->{'name'};
+    my $user   = $person->{'user'};
+    my $key    = "person_${user}";
+    
+    $person->{'media'}        = 'person';
+    $person->{'chapter_name'} = $chapter_name;
+    $person->{'url'}          = "/people/${user}";
+    $ps->update_document_if_changed( $key, $person );
+    
+    say "$key = $name";
+}
