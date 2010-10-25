@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+
+use Modern::Perl;
+use Getopt::Std;
+
+use lib     qw( lib );
+use PubStandards;
+use Upcoming;
+
+
+
+my %opt;
+getopts( 'p', \%opt );
+
+my $name    = shift // 'london';
+my $ps      = PubStandards->new();
+my $chapter = $ps->get_chapter( $name );
+my $events  = $chapter->get_all_events_from_upcoming(); 
+
+foreach my $event ( @$events ) {
+    my $id  = $event->{'id'};
+    my $key = "event_${id}";
+    
+    say "-> delete event $id";
+    $ps->delete_document( $key );
+    
+    if ( defined $opt{'p'} ) {
+        my $photos = $ps->get_event_photos_from_flickr( $id );
+        foreach my $photo ( @$photos ) {
+            my $photo_id  = $photo->{'id'};
+            my $photo_key = "photo_${photo_id}";
+        
+            say "   delete photo $photo_key";
+            $ps->delete_document( $photo_key );
+        }
+    }
+}

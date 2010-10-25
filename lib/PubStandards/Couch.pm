@@ -39,6 +39,13 @@ method get_document ( Str $id! ) {
     return undef if $no_such_document;
     return $doc;
 }
+method delete_document ( Str $id! ) {
+    my $db  = $self->get_database();
+    my $doc = $db->get_doc( $id );
+    
+    $db->delete_doc( $id, $doc->{'_rev'} )
+        if defined $doc->{'_rev'};
+}
 method update_document_if_changed ( Str $id!, HashRef $state ) {
     my $db      = $self->get_database();
     my $doc     = $db->get_doc( $id );
