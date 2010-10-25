@@ -5,6 +5,7 @@ use Moose::Role;
 use MooseX::Method::Signatures;
 
 use DB::CouchDB;
+use JSON;
 use Test::Deep::NoTest  qw( eq_deeply );
 
 use constant ROWS_PER_REQUEST => 50;
@@ -45,6 +46,25 @@ method delete_document ( Str $id! ) {
     
     $db->delete_doc( $id, $doc->{'_rev'} )
         if defined $doc->{'_rev'};
+}
+method update_document ( Str $id!, HashRef $state ) {
+    my $db = $self->get_database();
+    
+    return $db->update_doc( $id, $state );
+}
+method add_to_document ( Str $id!, HashRef $added_state, Bool $create=0 ) {
+    my $db  = $self->get_database();
+    my $doc = $db->get_doc( $id );
+    
+    return $doc
+        if $doc->err && !$create;
+    
+    my %new_doc = ( 
+            %$doc,
+            %$added_state,
+        );
+    
+    return $self->update_if_changed( $id, \%new_doc );
 }
 method update_document_if_changed ( Str $id!, HashRef $state ) {
     my $db      = $self->get_database();
