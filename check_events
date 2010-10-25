@@ -54,4 +54,11 @@ foreach my $event ( @$events ) {
             if $changed;
     }
 }
+
+my $next  = $ps->get_next_pubstandards_date(); 
+my $event = $chapter->get_event_by_date( $next );
+
+if ( !defined $event ) {
+    say 'Need to create next event...';
+}
 exit;

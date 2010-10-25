@@ -15,6 +15,19 @@ use constant MONTHS => qw(
 
 
 
+method get_next_pubstandards_date {
+    my $now   = time();
+    my $month = (localtime $now)[4]+1;
+    my $year  = (localtime $now)[5]+1900;
+    
+    $month++;
+    if ( $month == 13 ) {
+        $month = 1;
+        $year++;
+    }
+    
+    return $self->get_middle_thursday_of_month( $year, $month );
+}
 method get_year_of_pubstandards_dates {
     my $now   = time();
     my $month = (localtime $now)[4]+1;
