@@ -8,6 +8,9 @@ use PubStandards;
 
 
 
+my %opt;
+getopts( 'v', \%opt );
+
 my $name    = shift
               // 'london';
 
@@ -28,6 +31,27 @@ foreach my $event ( @$events ) {
         $event->{'slug'}         = $chapter->get_new_slug( $event->{'name'} );
         $event->{'chapter_name'} = $name;
         $ps->update_document( $event_key, $event );
+    }
+    
+    my $photos = $ps->get_event_photos_from_flickr( $id );
+    foreach my $photo ( @$photos ) {
+        my $photo_id = $photo->{'id'};
+        my $photo_key = "photo_${photo_id}";
+        
+        say "      photo ${photo_id}"
+            if $opt{'v'};
+        
+        my $details = $ps->get_photo_details( $photo_id );
+        $details->{'event_document'} = $event_key;
+        $details->{'chapter_name'}   = $name;
+        $details->{'views'}          = sprintf '%08d',
+                                           $details->{'views'};
+        
+        my( $changed, $doc )
+            = $ps->update_document_if_changed( $photo_key, $details );
+        
+        say "      update document $photo_key"
+            if $changed;
     }
 }
 exit;
