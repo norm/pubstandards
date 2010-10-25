@@ -63,3 +63,47 @@ h3 {
     -webkit-box-shadow:     2px 2px 5px #666;
     -moz-box-shadow:        2px 2px 5px #666;
 }
+
+h1 {
+    position:               absolute;
+    left:                   -5px;
+    top:                    -70px;
+}
+h1 span {
+    position:               absolute;
+    left:                   -999em;
+}
+h1 img {
+    display:                block;
+}
+#tagline {
+    color:                  #690;
+    font-family:            "Hoefler Text",
+                            "Georgia",
+                            serif;
+    font-size:              1.4em;
+    line-height:            1.3;
+    margin-left:            280px;
+    min-height:             220px;
+}
+#tagline em {
+    font-weight:            normal;
+    color:                  #360;
+}
+
+#content {
+    color:                  #666;
+}
+#content p {
+    line-height:            1.4;
+    margin-bottom:          1em;
+    margin-top:             1em;
+}
+#content p em {
+    color:                  #000;
+    font-weight:            normal;
+}
+#content p strong {
+    color:                  #000;
+}
+
