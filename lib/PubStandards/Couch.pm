@@ -92,4 +92,19 @@ method query_view ( Str $design!, Str $view!, HashRef $options? ) {
     
     return( $results, $more );
 }
+method query_view_for_key ( Str $design!, Str $view!, Str $key! ) {
+    my( $results, undef )
+        = $self->query_view( 
+              $design,
+              $view,
+              {
+                  key => JSON->new->allow_nonref->encode($key),
+              }
+          );
+    
+    return $results->{'data'}->[0]
+        if defined $results;
+    return;
+}
+
 1;

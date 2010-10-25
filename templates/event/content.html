@@ -1,0 +1,27 @@
+{{
+    if ( $start_date =~ m{ (\d+) - (\d+) - (\d+) }x ) {
+        my $year  = $1;
+        my $month = $2;
+        my $day   = $3;
+        my $link  = '';
+        
+        if ( defined $watchlist_count ) {
+          $link =  q(<span class='upcoming'>)
+                . qq(<a href='http://upcoming.yahoo.com/event/${id}'>)
+                .  q(original upcoming entry</a>);
+        }
+        
+        $RENDER .= sprintf '<p id="date-held">%d %s %d %s</p>', 
+                           $day, $month_names[$month], $year, $link;
+    }
+}}
+
+<p>${description}</p>
+
+{{  
+    if ( @photos ) {
+}}  
+${include photo_list}
+{{
+    }
+}}

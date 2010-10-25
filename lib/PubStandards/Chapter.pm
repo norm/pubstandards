@@ -123,6 +123,16 @@ method get_all_people {
     
     return $results->{'data'};
 }
+method get_document_by_slug ( Str $slug! ) {
+    return $self->query_view_for_key(
+            $self->get_name(),
+            'by_slug',
+            $slug
+        );
+}
+method slug_exists ( Str $slug! ) {
+    return defined( $self->get_document_by_slug( $slug ) );
+}
 
 method get_sample_photos {
     my @photos;
@@ -148,6 +158,11 @@ method get_photos_by_fragment_id ( Str $id! ) {
     
     return @{ $results->{'data'} };
 }
+method get_photos_from_event ( Str $id! ) {
+    my $ps = $self->get_parent();
+    return $ps->get_event_photos( $id );
+}
+
 method get_all_events_from_upcoming {
     my @events;
     

@@ -118,6 +118,13 @@ h1 img {
     margin-top:             1em;
 }
 
+p#date-held {
+    color:                  #360;
+    font-size:              1.2em;
+    margin-top:             -1.5em;
+}
+
+
 #event-list,
 #event-list ol {
     margin-top:             1em;
@@ -154,6 +161,10 @@ h1 img {
     margin-bottom:          0.4em;
 }
 
+#event #photos {
+    margin-top:             2em;
+}
+
 #photos li {
     float:                  left;
     margin-right:           5px;
@@ -161,6 +172,20 @@ h1 img {
 }
 #photos {
     overflow:               auto;
+}
+
+.upcoming {
+    font-size:              0.8em;
+}
+.upcoming:before {
+    content:                '- ';
+}
+.upcoming a {
+    color:                  #360;
+}
+.upcoming a:hover,
+.upcoming a:hover {
+    color:                  #fff;
 }
 
 #navigation {

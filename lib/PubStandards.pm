@@ -81,6 +81,20 @@ method get_chapter ( Str $chapter ) {
         );
 }
 
+method get_event_photos ( Str $id! ) {
+    my( $results, $more ) = $self->query_view(
+            'web',
+            'photo_by_event',
+            {
+                limit        => 200,
+                key          => qq("$id"),
+                include_docs => 'true',
+            }
+        );
+    
+    return $results->{'data'};
+}
+
 method get_event_photos_from_flickr ( Str $id! ) {
     my $flickr = $self->get_flickr();
     my %event_photos = (

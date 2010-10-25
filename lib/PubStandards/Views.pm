@@ -25,6 +25,21 @@ method handle_view ( $request! ) {
         when ( '/people/' ) {
             return $self->render_people_list();
         }
+        when ( m{^ / ( [a-z0-9_-]+ ) $}x ) {
+            my $slug = $1;
+            my $doc  = $self->get_document_by_slug( $slug );
+            
+            if ( defined $doc ) {
+                my $id = $doc->{'id'};
+                $id =~ m{^ ( [a-z]+ ) _ ( \d+ ) $}x;
+                
+                my $view    = $1;
+                my $item_id = $2;
+                
+                return $self->render_event( $item_id )
+                    if 'event' eq $view;
+            }
+        }
     }
     
     return $self->render_404();
@@ -56,6 +71,16 @@ method render_events_list {
     my $template = $self->get_template( 'all_events' );
     my %data     = (
             events => $self->get_all_events(),
+        );
+    
+    return $self->render_html_response( $template, \%data );
+}
+method render_event ( $id ) {
+    my $template = $self->get_template( 'event' );
+    my $doc      = $self->get_document( "event_${id}" );
+    my %data     = (
+            %$doc,
+            photos => $self->get_photos_from_event( $id ),
         );
     
     return $self->render_html_response( $template, \%data );
