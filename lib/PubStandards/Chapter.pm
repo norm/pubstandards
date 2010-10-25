@@ -217,6 +217,24 @@ method get_document_by_slug ( Str $slug! ) {
 method slug_exists ( Str $slug! ) {
     return defined( $self->get_document_by_slug( $slug ) );
 }
+method get_new_slug ( Str $text! ) {
+    my $slug = lc $text;
+    
+    # replace anything not alphanum with dashes
+    $slug =~ s{ (?: [^ a-z0-9] | \s )+ }{-}gsx;
+    # no dashes at the start or end
+    $slug =~ s{^ -* (.*?) -* $}{$1}gsx;
+    
+    my $suffix = 1;
+    my $key    = $slug;
+    
+    while ( $self->slug_exists( $key ) ) {
+        $suffix++;
+        $key = "${slug}-${suffix}";
+    }
+    
+    return $key;
+}
 
 method get_sample_photos {
     my @photos;
