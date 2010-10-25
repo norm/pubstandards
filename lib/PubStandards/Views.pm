@@ -25,6 +25,12 @@ method handle_view ( $request! ) {
         when ( '/people/' ) {
             return $self->render_people_list();
         }
+        when ( '/more-about-this' ) {
+            return $self->render_about();
+        }
+        when ( '/keep-in-touch' ) {
+            return $self->render_contact();
+        }
         when ( '/photo/' ) {
             return $self->render_redirect( '/' );
         }
@@ -186,6 +192,15 @@ method render_calendar ( $is_ics? ) {
             }
         );
 }
+method render_contact {
+    my $template = $self->get_template( 'contact' );
+    return $self->render_html_response( $template, {} );
+}
+method render_about {
+    my $template = $self->get_template( 'about' );
+    return $self->render_html_response( $template, {} );
+}
+
 method render_404 () {
     my $template = $self->get_template( '404' );
     return $self->render_html_response( $template, {}, 404 );
