@@ -19,6 +19,9 @@ method handle_view ( $request! ) {
         when ( '/' ) {
             return $self->render_homepage();
         }
+        when ( '/previously' ) {
+            return $self->render_events_list();
+        }
     }
     
     return $self->render_404();
@@ -42,6 +45,14 @@ method render_homepage {
             next_timestamp  => 1287075600,
             photos          => $self->get_sample_photos(),
             future_events   => $future,
+        );
+    
+    return $self->render_html_response( $template, \%data );
+}
+method render_events_list {
+    my $template = $self->get_template( 'all_events' );
+    my %data     = (
+            events => $self->get_all_events(),
         );
     
     return $self->render_html_response( $template, \%data );

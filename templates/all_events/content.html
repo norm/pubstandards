@@ -1,0 +1,48 @@
+<ol id='event-list'>
+{{
+    my $prev_year  = 2000;
+    my $prev_month = 0;
+    my $year       = '';
+    my $month      = '';
+    
+    foreach my $event ( @events ) {
+        my $event_year  = $event->{'key'}[0];
+        my $event_month = $month_names[ $event->{'key'}[1] ];
+        my $event_day   = $event->{'key'}[2];
+        my $name        = $event->{'value'}{'name'};
+        my $slug        = $event->{'value'}{'slug'};
+        
+        if ( $prev_month ne $event_month ) {
+            $year      .= "<li><h3>${prev_month}</h3><ol>${month}</ol></li>\n"
+                if length $month;
+            
+            $prev_month = $event_month;
+            $month      = '';
+        }
+        if ( $prev_year ne $event_year ) {
+            $RENDER   .= "<li><h2>${prev_year}</h2><ol>${year}</ol></li>\n"
+                if length $year;
+            
+            $prev_year = $event_year;
+            $year      = '';
+        }
+        
+        $month .= "<li><a href='/${slug}'>${name}</a></li>";
+    }
+    
+    $RENDER   .= "<li><h2>${prev_year}</h2><ol>${year}</ol></li>\n"
+        if length $year;
+}}
+</ol>
+
+<div class='advisory'>
+  <h3>Event missing?</h3>
+  <p>
+    Make sure it has been added to the 
+    <a href='http://upcoming.yahoo.com/group/2997/'>Upcoming group</a>.
+  </p>
+  <p>
+    The list of events is rebuilt every night.
+  </p>
+  
+</div>

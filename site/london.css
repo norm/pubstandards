@@ -118,6 +118,42 @@ h1 img {
     margin-top:             1em;
 }
 
+#event-list,
+#event-list ol {
+    margin-top:             1em;
+    position:               relative;
+}
+#event-list ol {
+    padding-top:            1.5em;
+    margin-left:            50px;
+    position:               relative;
+    z-index:                2;
+}
+#event-list h2,
+#event-list h3 {
+    float:                  left;
+    margin:                 0;
+}
+#event-list h2 {
+    color:                  #cf9;
+    font-size:              6em;
+    float:                  left;
+    position:               absolute;
+    z-index:                1;
+}
+#event-list h3 {
+    text-align:             right;
+    width:                  225px;
+}
+#event-list ol ol {
+    margin-bottom:          0.2em;
+    margin-left:            250px;
+    padding-top:            0;
+}
+#event-list ol li {
+    margin-bottom:          0.4em;
+}
+
 #photos li {
     float:                  left;
     margin-right:           5px;
@@ -153,6 +189,34 @@ h1 img {
 }
 #homepage #navigation a {
     font-weight:            bold;
+}
+
+.advisory {
+    background:             #f8f8f8;
+    border:                 1px solid #ccc;
+    color:                  #999;
+    margin:                 4em 2em 1em;
+    padding:                0.5em;
+    font-size:              0.8em;
+}
+.advisory h3 {
+    color:                  #666;
+    margin-top:             0;
+    margin-bottom:          1em;
+    font-size:              1.2em;
+}
+.advisory li {
+    list-style:             square outside;
+    margin-left:            1.2em;
+}
+#content .advisory ol,
+#content .advisory ul,
+#content .advisory p {
+    margin:                 0.5em 0 0;
+}
+.advisory i {
+    font-style:             italic;
+    color:                  #666;
 }
 
 #colophon {

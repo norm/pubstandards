@@ -76,6 +76,19 @@ method BUILD {
 
 
 
+method get_all_events {
+    my $ps = $self->get_parent();
+    
+    my( $results, $more ) = $ps->query_view(
+            $self->get_name(),
+            'events',
+            {
+                limit    => 100,
+            }
+        );
+    
+    return $results->{'data'};
+}
 method get_future_events {
     my $ps    = $self->get_parent();
     my @now   = localtime();
