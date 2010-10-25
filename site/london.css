@@ -107,6 +107,54 @@ h1 img {
     color:                  #000;
 }
 
+#homepage h2 {
+    margin-bottom:          0;
+    margin-top:             1em;
+}
+#homepage h2 + p {
+    margin-top:             0;
+}
+#homepage h3 {
+    margin-top:             1em;
+}
+
+#photos li {
+    float:                  left;
+    margin-right:           5px;
+    margin-bottom:          5px;
+}
+#photos {
+    overflow:               auto;
+}
+
+#navigation {
+    font-size:              0.8em;
+    margin-top:             2em;
+    line-height:            1.4;
+}
+#footer #navigation a {
+    color:                  black;
+    border-bottom:          1px dotted #666;
+}
+#footer #navigation a:hover,
+#footer #navigation a:focus {
+    color:                  #fff;
+    background:             black;
+}
+
+#homepage #navigation {
+    font-size:              1em;
+    color:                  #666;
+}
+#homepage #navigation span {
+    display:                block;
+    margin-top:             1em;
+    margin-bottom:          1em;
+}
+#homepage #navigation a {
+    font-weight:            bold;
+}
+
 #colophon {
     width:                  30em;
     min-width:              550px;

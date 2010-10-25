@@ -1,0 +1,14 @@
+<ul id='photos'>
+{{
+    foreach my $photo ( @photos ) {
+        my $id  = $photo->{'doc'}{'id'};
+        my $src = $photo->{'doc'}{'urls'}{'photo_square'};
+        my $alt = $photo->{'doc'}{'title'};
+        my $url = "/photo/${id}";
+}}
+  <li><a href='${url}'><img 
+         src='${src}' alt='${alt}' width='75' height='75'></a></li>
+{{
+    }  
+}}
+</ul>
