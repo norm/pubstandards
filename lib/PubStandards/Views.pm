@@ -28,6 +28,10 @@ method handle_view ( $request! ) {
         when ( '/photo/' ) {
             return $self->render_redirect( '/' );
         }
+        when ( m{^ /next (\.ics)? $}x ) {
+            my $ics = $1;
+            return $self->render_calendar( $ics );
+        }
         when ( m{^ /photo/ ( [a-z0-9_-]+ ) $}x ) {
             my $id = $1;
             return $self->render_photo( $id );
@@ -141,6 +145,47 @@ method render_photo ( $photo ) {
     
     return $self->render_404();
 }
+method render_calendar ( $is_ics? ) {
+    my $type     = defined $is_ics ? 'ics' : 'html';
+    my $template = $self->get_template( 'calendar', $type );
+    
+    my $ps      = $self->get_parent();
+    my @dates   = $ps->get_year_of_pubstandards_dates();
+    my $has_url = 1;
+    
+    my @list_of_dates = map {
+            my %hash = (
+                    stamp    => $_,
+                    day      => (localtime $_)[3],
+                    ordinate => ordinate( (localtime $_)[3] ),
+                    month    => (localtime $_)[4]+1,
+                    year     => (localtime $_)[5]+1900,
+                    name     => $self->get_canonical_event_name( $_ ),
+                );
+            
+            my $event = $self->get_event_by_date( $_ );
+            $hash{'url'} = 'http://upcoming.yahoo.com/event/'
+                           . $event->{'doc'}{'id'}
+                if defined $event;
+            
+            
+            \%hash;
+        } @dates;
+    
+    return $self->render_ics_response(
+            $template,
+            {
+                dates => \@list_of_dates,
+            }
+        ) if $is_ics;
+    
+    return $self->render_html_response(
+            $template,
+            {
+                dates  => \@list_of_dates,
+            }
+        );
+}
 method render_404 () {
     my $template = $self->get_template( '404' );
     return $self->render_html_response( $template, {}, 404 );
@@ -157,6 +202,28 @@ method render_redirect ( Str $path ) {
 method render_html_response ( $template, $data, $code=200 ) {
     my $headers = [ 'Content-Type' => 'text/html; charset=UTF-8' ];
     return $self->render_response( $template, $data, $headers, $code );
+}
+method render_ics_response ( $template, $data, $code=200 ) {
+    my $headers = [ 'Content-Type' => 'text/html; charset=UTF-8' ];
+    my $request = $self->get_request();
+    my %data    = (
+            request => $request,
+            chapter => $self->get_name(),
+            %$data,
+        );
+    
+    my( $output, $errors ) = render_intermixed( $template, \%data );
+    # TODO - deal with errors appropriately
+    
+    $output =~ s{\n}{\r\n}gs;       # because the spec says so
+    
+    return [
+            $code,
+            $headers,
+            [
+                encode_utf8( $output ),
+            ]
+        ];
 }
 method render_response ( $template, $data, $headers, $code=200 ) {
     my $request = $self->get_request();

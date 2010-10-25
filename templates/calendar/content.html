@@ -1,0 +1,52 @@
+<h2>When?</h2>
+<p>Pub Standards occurs on the <em>middle Thursday</em> of every month, from <em>6pm</em>.</p>
+
+
+<ol id='event-list'>
+{{
+    my $prev_year  = 2000;
+    my $prev_month = 0;
+    my $year       = '';
+    my $month      = '';
+    
+    foreach my $event ( @dates ) {
+        my $event_year  = $event->{'year'};
+        my $event_month = $month_names[ $event->{'month'} ];
+        my $event_day   = $event->{'ordinate'};
+        my $name        = $event->{'name'};
+        my $url         = $event->{'url'};
+        
+        if ( $prev_month ne $event_month ) {
+            $year      .= "<li><h3>${prev_month}</h3><ol>${month}</ol></li>\n"
+                if length $month;
+            
+            $prev_month = $event_month;
+            $month      = '';
+        }
+        if ( $prev_year ne $event_year ) {
+            $RENDER   .= "<li><h2>${prev_year}</h2><ol>${year}</ol></li>\n"
+                if length $year;
+            
+            $prev_year = $event_year;
+            $year      = '';
+        }
+        
+        if ( defined $url ) {
+            $month .= "<li>${event_day} &mdash; "
+                      . "<a href='${url}'>${name}</a></li>";
+        }
+        else {
+            $month .= "<li>${event_day} &mdash; ${name}</li>";
+        }
+    }
+    
+    $RENDER   .= "<li><h2>${prev_year}</h2><ol>${year}</ol></li>\n"
+        if length $year;
+}}
+</ol>
+
+<div class='advisory'>
+  <p>This list is also available as an 
+    <a href='/next.ics'>iCalendar file/feed</a>. Subscribe with <code>http://london.pubstandards.com/next.ics</code>.
+  </p>
+</div>

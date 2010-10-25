@@ -1,0 +1,53 @@
+${include common_data}
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//PUBSTANDARDS//PUBCAL 1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Pub Standards
+BEGIN:VTIMEZONE
+TZID:Europe/London
+X-LIC-LOCATION:Europe/London
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0100
+TZNAME:BST
+DTSTART:19700329T010000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0000
+TZNAME:GMT
+DTSTART:19701025T020000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+{{
+    my @now     = gmtime time();
+    my $dtstamp = sprintf '%04d%02d%02dT%02d0000Z',
+                      $now[5]+1900, $now[4]+1, $now[3], $now[2];
+                          
+    foreach my $event ( @dates ) {
+        my $timestamp   = $event->{'stamp'};
+        my $year        = $event->{'year'};
+        my $month       = $event->{'month'};
+        my $day         = $event->{'day'};
+        my $name        = $event->{'name'};
+        my $date_format = sprintf '%04d%02d%02d',
+                              $year, $month, $day;
+}}
+BEGIN:VEVENT
+UID:${timestamp}PS
+DTSTAMP:${dtstamp}
+ORGANIZER:beer@pubstandards.co.uk
+LOCATION:The Bricklayers Arms\, Gresse Street\, London\, W1
+DTSTART:${date_format}T180000
+SUMMARY:${name}
+DTEND:${date_format}T233000
+DESCRIPTION:Beer\, lots of beer.
+END:VEVENT
+{{
+    }
+}}
+END:VCALENDAR

@@ -8,6 +8,8 @@ use MooseX::Method::Signatures;
 with 'PubStandards::Couch';
 with 'PubStandards::Views';
 
+use JSON;
+use Roman;
 use Text::SimpleTemplate;
 
 use constant CONFIG_KEYS => qw(
@@ -109,6 +111,34 @@ method get_future_events {
     
     return $results->{'data'};
 }
+method get_event_by_date ( $timestamp ) {
+    my @time = localtime $timestamp;
+    my @key  = ( $time[5]+1900, $time[4]+1, $time[3] );
+    
+    my( $results, undef )
+        = $self->query_view( 
+              $self->get_name(),
+              'events',
+              {
+                  include_docs => 'true',
+                  key          => to_json( \@key ),
+              }
+          );
+    
+    return $results->{'data'}->[0]
+        if defined $results;
+    return;
+}
+method get_canonical_event_name ( $timestamp ) {
+    my $month = (localtime $timestamp)[4]+1;
+    my $year  = (localtime $timestamp)[5]+1900;
+    
+    my $event_number = ( $year - 2005 ) * 12
+                     + ( $month - 11 );
+    
+    return 'Pub Standards ' . uc roman( $event_number );
+}
+
 method get_all_people {
     my $ps = $self->get_parent();
     
