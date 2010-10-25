@@ -107,3 +107,26 @@ h1 img {
     color:                  #000;
 }
 
+#colophon {
+    width:                  30em;
+    min-width:              550px;
+    padding:                1em 40px 2em;
+    color:                  #666;
+    font-size:              0.8em;
+}
+#colophon a {
+    color:                  #666;
+    border-bottom:          1px dotted #333;
+}
+#colophon a:hover,
+#colophon a:focus {
+    color:                  white;
+    background:             #666;
+}
+
+#colophon p {
+    margin-bottom:          0.5em;
+}
+#colophon i {
+    color:                  #000;
+}
