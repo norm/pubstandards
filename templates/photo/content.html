@@ -1,0 +1,29 @@
+<div class='image'>
+  <img src="${urls{'photo'}}" alt=''>
+  <span class='title'>${title}</span>
+  <cite>
+    <a href="${urls{'photopage'}}">uploaded to Flickr</a>
+       by <a href="http://www.flickr.com/people/${owner{'nsid'}}">
+         ${owner{'realname'}}</a>
+  </cite>
+  <span class='shortlink'>${urls{'short'}}</span>
+</div>
+
+<p>Taken at <a href="/${event{'slug'}}">${event{'name'}}</a>.</p>
+
+{{
+    if ( @users ) {
+}}
+    <h3>In this photo:</h3>
+    <ul class='bulleted'>{{
+        foreach my $user ( @users ) {
+            my $url  = $user->{'url'};
+            my $name = $user->{'name'};
+            }}
+            <li><a href='${url}'>${name}</a></li>
+            {{
+        }
+    }}</ul>
+{{
+    }
+}}

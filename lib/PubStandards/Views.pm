@@ -25,6 +25,13 @@ method handle_view ( $request! ) {
         when ( '/people/' ) {
             return $self->render_people_list();
         }
+        when ( '/photo/' ) {
+            return $self->render_redirect( '/' );
+        }
+        when ( m{^ /photo/ ( [a-z0-9_-]+ ) $}x ) {
+            my $id = $1;
+            return $self->render_photo( $id );
+        }
         when ( m{^ /people/ ( [a-z0-9_-]+ ) $}x ) {
             my $name = $1;
             return $self->render_person( $name );
@@ -112,9 +119,40 @@ method render_person ( $name ) {
     
     return $self->render_404();
 }
+method render_photo ( $photo ) {
+    my $ps  = $self->get_parent();
+    my $doc = $ps->get_document( "photo_${photo}" );
+    
+    if ( defined $doc ) {
+        my $template = $self->get_template( 'photo' );
+        
+        $doc->{'event'} = $ps->get_document( $doc->{'event_document'} );
+        
+        foreach my $person ( @{ $doc->{'people'} } ) {
+            my $id   = $person->{'username'};
+            my $pdoc = $ps->get_document( "person_${id}" );
+            
+            push( @{ $doc->{'users'} }, $pdoc )
+                if defined $pdoc;
+        }
+        
+        return $self->render_html_response( $template, $doc );
+    }
+    
+    return $self->render_404();
+}
 method render_404 () {
     my $template = $self->get_template( '404' );
     return $self->render_html_response( $template, {}, 404 );
+}
+method render_redirect ( Str $path ) {
+    return [
+            301,
+            [
+                'Location' => $path,
+            ],
+            [],
+        ];
 }
 method render_html_response ( $template, $data, $code=200 ) {
     my $headers = [ 'Content-Type' => 'text/html; charset=UTF-8' ];

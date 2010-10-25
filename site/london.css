@@ -317,6 +317,30 @@ p#date-held {
     color:                  #666;
 }
 
+.image .title {
+    color:                  #690;
+    display:                block;
+    font-family:            "Hoefler Text",
+                            "Georgia",
+                            serif;
+    font-size:              2em;
+    font-weight:            bold;
+    margin-top:             0.25em;
+}
+.image img {
+    display:                block;
+}
+.image .shortlink {
+    display:                block;
+    margin-top:             0.2em;
+    font-size:              0.8em;
+    color:                  #999;
+}
+
+.bulleted li {
+    list-style:             square outside;
+}
+
 #colophon {
     width:                  30em;
     min-width:              550px;
