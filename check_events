@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+
+use Modern::Perl;
+use Getopt::Std;
+
+use lib     qw( lib );
+use PubStandards;
+
+
+
+my $name    = shift
+              // 'london';
+
+my $ps      = PubStandards->new();
+my $chapter = $ps->get_chapter( $name );
+my $events  = $chapter->get_all_events_from_upcoming(); 
+
+foreach my $event ( @$events ) {
+    my $id        = $event->{'id'};
+    my $event_key = "event_${id}";
+    my $doc       = $ps->get_document( $event_key );
+    
+    say "-> EVENT $id";
+    
+    if ( !defined $doc ) {
+        say "   new event ${event_key}";
+        
+        $event->{'slug'}         = $chapter->get_new_slug( $event->{'name'} );
+        $event->{'chapter_name'} = $name;
+        $ps->update_document( $event_key, $event );
+    }
+}
+exit;
