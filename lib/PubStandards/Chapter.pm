@@ -123,6 +123,22 @@ method get_all_people {
     
     return $results->{'data'};
 }
+method get_photos_of_person ( Str $nsid ) {
+    say "-> $nsid";
+    
+    my( $results, $more ) = $self->query_view(
+            $self->get_name(),
+            'photo_by_person',
+            {
+                limit        => 200,
+                key          => qq("$nsid"),
+                include_docs => 'true',
+            }
+        );
+    
+    return $results->{'data'};
+}
+
 method get_document_by_slug ( Str $slug! ) {
     return $self->query_view_for_key(
             $self->get_name(),

@@ -161,8 +161,21 @@ p#date-held {
     margin-bottom:          0.4em;
 }
 
+#person #photos,
 #event #photos {
     margin-top:             2em;
+}
+
+#person .twitter {
+    margin-top:             -2em;
+    font-weight:            bold;
+}
+#person .twitter a {
+    color:                  #690;
+}
+#person .twitter a:hover,
+#person .twitter a:focus {
+    color:                  #fff;
 }
 
 #photos li {

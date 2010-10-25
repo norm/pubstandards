@@ -25,6 +25,10 @@ method handle_view ( $request! ) {
         when ( '/people/' ) {
             return $self->render_people_list();
         }
+        when ( m{^ /people/ ( [a-z0-9_-]+ ) $}x ) {
+            my $name = $1;
+            return $self->render_person( $name );
+        }
         when ( m{^ / ( [a-z0-9_-]+ ) $}x ) {
             my $slug = $1;
             my $doc  = $self->get_document_by_slug( $slug );
@@ -92,6 +96,21 @@ method render_people_list {
         );
     
     return $self->render_html_response( $template, \%data );
+}
+method render_person ( $name ) {
+    my $ps       = $self->get_parent();
+    my $doc      = $ps->get_document( "person_$name" );
+    
+    if ( defined $doc ) {
+        my $template = $self->get_template( 'person' );
+        
+        # TODO - events appeared at
+        $doc->{'photos'} = $self->get_photos_of_person( $doc->{'nsid'} );
+        
+        return $self->render_html_response( $template, $doc )
+    }
+    
+    return $self->render_404();
 }
 method render_404 () {
     my $template = $self->get_template( '404' );
