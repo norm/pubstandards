@@ -317,6 +317,14 @@ p#date-held {
     color:                  #666;
 }
 
+.vevent .dtstart {
+    display:                block;
+    margin-top:             -2.2em;
+    margin-bottom:          1em;
+    font-size:              0.8em;
+    font-weight:            bold;
+}
+
 .image .title {
     color:                  #690;
     display:                block;
