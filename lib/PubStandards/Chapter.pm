@@ -76,6 +76,51 @@ method BUILD {
 
 
 
+method get_future_events {
+    my $ps    = $self->get_parent();
+    my @now   = localtime();
+    my @dates = ( $now[5]+1900, $now[4]+1, $now[3] );
+    my $key   = '[' 
+              . join( ',', @dates ) 
+              . ']';
+    
+    my( $results, $more ) = $ps->query_view(
+            $self->get_name(),
+            'events',
+            {
+                include_docs => 'true',
+                limit        => 100,
+                startkey     => $key,
+            }
+        );
+    
+    return $results->{'data'};
+}
+
+method get_sample_photos {
+    my @photos;
+    
+    # get photos from four random sets
+    foreach my $i ( 1..4 ) {
+        my $key = sprintf '%02d', int rand 100;
+        push @photos, $self->get_photos_by_fragment_id( $key );
+    }
+    
+    return \@photos;
+}
+method get_photos_by_fragment_id ( Str $id! ) {
+    my( $results, $more ) = $self->query_view(
+            $self->get_name(),
+            'photo_by_id_fragment',
+            {
+                include_docs => 'true',
+                key          => qq("${id}"),
+                limit        => 9,
+            }
+        );
+    
+    return @{ $results->{'data'} };
+}
 method get_all_events_from_upcoming {
     my @events;
     
@@ -103,5 +148,11 @@ method get_template ( Str $template!, Str $type='html' ) {
     my $templates = $self->get_templates();
     return $templates->get_template( $template, $type );
 }
+
+method get_name_for_month ( Int $month ) {
+    my $ps = $self->get_parent();
+    return $ps->get_name_for_month( $month );
+}
+
 
 1;

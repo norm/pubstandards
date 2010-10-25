@@ -5,12 +5,47 @@ use Moose::Role;
 use MooseX::Method::Signatures;
 
 use Encode;
+use Lingua::EN::Numbers::Ordinate;
 use Text::Intermixed;
 
 method handle_view ( $request! ) {
+    $self->set_request( $request );
+    my $path = $request->path();
+    
+    say '';
+    say "-> $path";
+    
+    given ( $path ) {
+        when ( '/' ) {
+            return $self->render_homepage();
+        }
+    }
+    
     return $self->render_404();
 }
 
+method render_homepage {
+    my $template = $self->get_template( 'homepage' );
+    my $future   = $self->get_future_events();
+    
+    foreach my $event ( @$future ) {
+        if ( $event->{'doc'}{'start_date'} =~ m{ (\d+) - (\d+) - (\d+) }x ) {
+            $event->{'doc'}{'year'}  = $1;
+            $event->{'doc'}{'month'} = $self->get_name_for_month( int $2 );
+            $event->{'doc'}{'day'}   = ordinate $3;
+        }
+    }
+    
+    my %data = (
+            days_remaining  => 5,
+            hours_remaining => 8,
+            next_timestamp  => 1287075600,
+            photos          => $self->get_sample_photos(),
+            future_events   => $future,
+        );
+    
+    return $self->render_html_response( $template, \%data );
+}
 method render_404 () {
     my $template = $self->get_template( '404' );
     return $self->render_html_response( $template, {}, 404 );

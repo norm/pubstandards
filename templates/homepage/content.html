@@ -1,0 +1,35 @@
+<h2>Next, on Pub Standards…</h2>
+<ol id='next'>
+{{
+    foreach my $event ( @future_events ) { 
+        my $name        = $event->{'doc'}{'name'};
+        my $description = $event->{'doc'}{'description'};
+        my $venue       = $event->{'doc'}{'venue_name'};
+        my $venue_url   = $event->{'doc'}{'venue_url'};
+        my $year        = $event->{'doc'}{'year'};
+        my $month       = $event->{'doc'}{'month'};
+        my $day         = $event->{'doc'}{'day'};
+        my $dtstart     = $event->{'doc'}{'start_date'};
+        my $upcoming    = 'http://upcoming.yahoo.com/event/'
+                          . $event->{'doc'}{'id'};
+}}
+    <li class='vevent'>
+      <h3 class='summary'><a class='url' href='${upcoming}'>${name}</a></h3>
+      <p>
+        <span class='dtstart'>
+          <span class='value' title='${dtstart}'>
+            ${day} ${month} ${year}
+          </span>
+        </span>
+        
+        At <a class='location' href='${venue_url}'>${venue}</a>.
+        ${description}
+      </p>
+    </li>
+{{
+    }
+}}
+</ol>
+
+<h2>Some photos from London Pub Standards</h2>
+${include photo_list}

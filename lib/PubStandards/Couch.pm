@@ -7,6 +7,8 @@ use MooseX::Method::Signatures;
 use DB::CouchDB;
 use Test::Deep::NoTest  qw( eq_deeply );
 
+use constant ROWS_PER_REQUEST => 50;
+
 has database => (
     isa     => 'DB::CouchDB',
     is      => 'ro',
@@ -70,4 +72,24 @@ method update_document_if_changed ( Str $id!, HashRef $state ) {
     return( $changed, $doc );
 }
 
+method query_view ( Str $design!, Str $view!, HashRef $options? ) {
+    my $db      = $self->get_database();
+    my %options = (
+            limit => ROWS_PER_REQUEST,
+        );
+    
+    %options = ( %options, %$options )
+        if defined $options;
+    
+    my $results = $db->view(
+            $design,
+            $view,
+            \%options,
+        );
+    
+    my $count = $results->{'count'} // 0;
+    my $more  = $count > ROWS_PER_REQUEST;
+    
+    return( $results, $more );
+}
 1;

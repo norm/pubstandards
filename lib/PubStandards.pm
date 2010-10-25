@@ -6,6 +6,7 @@ use MooseX::FollowPBP;
 use MooseX::Method::Signatures;
 
 with 'PubStandards::Couch';
+with 'PubStandards::Dates';
 
 use Upcoming;
 use Flickr;
