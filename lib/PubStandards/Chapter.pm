@@ -109,6 +109,20 @@ method get_future_events {
     
     return $results->{'data'};
 }
+method get_all_people {
+    my $ps = $self->get_parent();
+    
+    my( $results, $more ) = $ps->query_view(
+            $self->get_name(),
+            'people',
+            {
+                limit        => 100,
+                include_docs => 'true',
+            }
+        );
+    
+    return $results->{'data'};
+}
 
 method get_sample_photos {
     my @photos;

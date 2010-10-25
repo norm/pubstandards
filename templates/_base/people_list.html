@@ -1,0 +1,28 @@
+<ul class='people-list'>
+{{
+    use HTML::Entities;
+    
+    foreach my $person ( @people ) {
+        my $doc         = $person->{'doc'};
+        my $name        = encode_entities( $doc->{'name'} );
+        my $description = encode_entities( $doc->{'description'}, '<>&"' );
+        my $avatar      = $doc->{'avatar'};
+        my $twitter     = $doc->{'twitter'};
+        my $url         = $doc->{'url'};
+}}
+    <li>
+      <h3><a class='fn' href='${url}'>
+        <img src='${avatar}' width='75' height='75' alt=''>
+        <span>${name}</span>
+      </a>
+      {{ if ( defined $twitter ) { }}
+        <span>&mdash;</span> <a
+          href='http://twitter.com/${twitter}'><i>@${twitter}</i></a>
+      {{ } }}
+      </h3>
+      ${description}
+    </li>
+{{
+    }
+}}
+</ul>

@@ -22,6 +22,9 @@ method handle_view ( $request! ) {
         when ( '/previously' ) {
             return $self->render_events_list();
         }
+        when ( '/people/' ) {
+            return $self->render_people_list();
+        }
     }
     
     return $self->render_404();
@@ -53,6 +56,14 @@ method render_events_list {
     my $template = $self->get_template( 'all_events' );
     my %data     = (
             events => $self->get_all_events(),
+        );
+    
+    return $self->render_html_response( $template, \%data );
+}
+method render_people_list {
+    my $template = $self->get_template( 'all_people' );
+    my %data     = (
+            people => $self->get_all_people(),
         );
     
     return $self->render_html_response( $template, \%data );

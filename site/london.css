@@ -191,6 +191,66 @@ h1 img {
     font-weight:            bold;
 }
 
+.people-list {
+    margin-top:             -1em;
+}
+.people-list:after {
+    content:                ".";
+    display:                block;
+    height:                 0;
+    clear:                  both;
+    visibility:             hidden;
+}
+.people-list li {
+    padding-top:            1em;
+    width:                  46%;
+    padding-right:          4%;
+    float:                  left;
+}
+.people-list h3 {
+    font-size:              1.2em;
+    margin:                 0;
+}
+.people-list h3 i {
+    font-size:              0.83333em;
+}
+.people-list a {
+    color:                  #360;
+    display:                block;
+    margin-bottom:          5px;
+}
+.people-list span {
+    position:               absolute;
+    left:                   -999em;
+}
+.people-list a span {
+    position:               relative;
+    left:                   0;
+}
+.people-list a:hover,
+.people-list a:focus {
+    background:             transparent;
+    color:                  #360;
+}
+.people-list a:hover span,
+.people-list a:focus span,
+.people-list a:hover i,
+.people-list a:focus i {
+    background:             #360;
+    color:                  white;
+}
+.people-list h3 i {
+    font-family:            "Helvetica Neue",
+                            "Arial",
+                            "Helvetica",
+                            sans-serif;
+/*    font-size:              0.8333em;*/
+}
+.people-list img {
+    float:                  left;
+    margin-right:           20px;
+}
+
 .advisory {
     background:             #f8f8f8;
     border:                 1px solid #ccc;
